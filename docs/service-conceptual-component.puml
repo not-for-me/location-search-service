@@ -1,0 +1,31 @@
+@startuml
+
+title LSS System Component Diagram
+
+component [Web application] as web
+
+cloud Internet {
+}
+web -right-> Internet
+
+node "Backend" {
+    [API] as api
+    [Business] as business
+    [Ranking\nScheduler] as scheduler
+}
+Internet -down-( api
+api -down- business
+scheduler -right- business
+
+database "UserDB" {
+}
+business -right- UserDB
+
+database "SearchRanking\nDB" as search_db {
+  [Search Log]
+  [Search Ranking\nSnapshot]
+}
+business -down- search_db
+scheduler -down- search_db
+
+@enduml
