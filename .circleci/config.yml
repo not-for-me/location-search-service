@@ -38,7 +38,7 @@ jobs:
       - run: gradle clean test jacocoTestReport
 
       - store_artifacts:
-          path: reports/jacoco
+          path: ~/build/reports/jacoco
           destination: test-reports
 
       - codecov/upload:
