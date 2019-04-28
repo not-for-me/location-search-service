@@ -1,6 +1,7 @@
 # Location Search Service (LSS)
 
 ![build](https://img.shields.io/circleci/project/github/not-for-me/location-search.svg)
+![coverage](https://img.shields.io/codecov/c/github/not-for-me/location-search-service.svg)
 
 ## How to run
 T.B.D.
