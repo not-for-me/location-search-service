@@ -20,19 +20,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Entity
 @Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = "id"))
 public class User {
-    public static final int MIN_ID_LEN = 3;
     public static final int MAX_ID_LEN = 24;
-    public static final int MIN_PASSWORD_LEN = 8;
-    public static final int MAX_PASSWORD_LEN = 16;
+    public static final int MAX_PASSWORD_LEN = 256;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long seq;
     @Column(length = MAX_ID_LEN)
-    @Size(min = MIN_ID_LEN, max = MAX_ID_LEN)
     private String id;
     @Column(length = MAX_PASSWORD_LEN)
-    @Size(min = MIN_PASSWORD_LEN, max = MAX_PASSWORD_LEN)
     private String password;
 
     private static Set<GrantedAuthority> AUTHORITIES = new HashSet<>();
