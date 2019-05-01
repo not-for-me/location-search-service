@@ -4,12 +4,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Optional;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import kr.notforme.lss.Fixtures;
@@ -25,9 +26,9 @@ public class UserRepositoryTest {
     private UserRepository userRepository;
 
     @Test
-    public void testSave() {
+    public void save_given_user_then_save_it() {
         // Given
-        User user = Fixtures.generate("test-user");
+        User user = Fixtures.generateUser("test-user");
 
         // When
         userRepository.save(user);
@@ -36,10 +37,31 @@ public class UserRepositoryTest {
         assertThat(user.getSeq()).isPositive();
     }
 
-    @Test
-    public void testFindById() {
+    @Test(expected = DataIntegrityViolationException.class)
+    public void save_given_too_long_id_then_throw_DataIntegrityViolationException() {
         // Given
-        User user = Fixtures.generate("my-user");
+        User user = Fixtures.generateUser(RandomStringUtils.randomAlphanumeric(User.MAX_ID_LEN + 1));
+
+        // When
+        userRepository.save(user);
+    }
+
+
+    @Test(expected = DataIntegrityViolationException.class)
+    public void save_given_too_long_password_then_throw_DataIntegrityViolationException() {
+        // Given
+        User user = Fixtures.generateUser();
+        user.setPassword(RandomStringUtils.randomAlphanumeric(User.MAX_PASSWORD_LEN + 1));
+
+        // When
+        userRepository.save(user);
+    }
+
+    @Test
+    public void FindById_given_userId_then_return_user() {
+        // Given
+        final String userId = "my-user";
+        User user = Fixtures.generateUser(userId);
         entityManager.persist(user);
 
         // When
