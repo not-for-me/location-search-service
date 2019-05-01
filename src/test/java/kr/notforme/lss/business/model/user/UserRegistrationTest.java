@@ -5,8 +5,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
 
-public class UserRegistrationTest {
+import kr.notforme.lss.support.util.PasswordCryptoUtil;
 
+public class UserRegistrationTest {
     @Test
     public void toUser_given_registration_then_convert_to_user() {
         // Given
@@ -19,6 +20,6 @@ public class UserRegistrationTest {
         // Then
         assertThat(actual).isNotNull();
         assertThat(actual.getId()).isEqualTo(idFixture);
-        assertThat(actual.getPassword()).isEqualTo(passwordFixture);
+        // UserRegistration has encoded password, therefore don't check the equality
     }
 }
