@@ -1,8 +1,6 @@
 package kr.notforme.lss.business.service.place;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyCollection;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -16,7 +14,6 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
@@ -53,7 +50,7 @@ public class PlaceSearchServiceTest {
         StepVerifier.create(actualMono)
                     .expectNext(new ArrayList<>())
                     .verifyComplete();
-        then(placeSearchCacheService).should().putCache(eq(key), anyCollection());
+        then(placeSearchCacheService).should().putCache(eq(key), any());
         then(placeSearchRepository).should().search(keyword, page);
     }
 

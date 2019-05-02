@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import kr.notforme.lss.api.response.ApiResponse;
 import kr.notforme.lss.api.response.PlaceSearchResult;
 import kr.notforme.lss.business.service.place.PlaceSearchService;
+import kr.notforme.lss.business.service.search.SearchLogWriterService;
 import kr.notforme.lss.support.exceptions.LssApiException;
 import kr.notforme.lss.support.exceptions.ResourceAccessException;
 import reactor.core.publisher.Mono;
@@ -21,9 +22,12 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/places")
 public class PlaceSearchController {
     private final PlaceSearchService placeSearchService;
+    private final SearchLogWriterService searchLogWriterService;
 
-    public PlaceSearchController(PlaceSearchService placeSearchService) {
+    public PlaceSearchController(PlaceSearchService placeSearchService,
+                                 SearchLogWriterService searchLogWriterService) {
         this.placeSearchService = placeSearchService;
+        this.searchLogWriterService = searchLogWriterService;
     }
 
     @GetMapping("/search")
@@ -38,6 +42,7 @@ public class PlaceSearchController {
         return placeSearchService.search(keyword, pageRequest)
                                  .map(ApiResponse::of)
                                  .onErrorMap(ResourceAccessException.class,
-                                             e -> new LssApiException("unavailable to search resources", HttpStatus.SERVICE_UNAVAILABLE));
+                                             e -> new LssApiException("unavailable to search resources", HttpStatus.SERVICE_UNAVAILABLE))
+                                 .doOnRequest((v) -> searchLogWriterService.writeSearchLog(keyword));
     }
 }

@@ -21,6 +21,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import kr.notforme.lss.business.service.place.PlaceSearchService;
+import kr.notforme.lss.business.service.search.SearchLogWriterService;
 import reactor.core.publisher.Mono;
 
 @RunWith(SpringRunner.class)
@@ -31,6 +32,8 @@ public class PlaceSearchControllerTest {
 
     @MockBean
     private PlaceSearchService placeSearchService;
+    @MockBean
+    private SearchLogWriterService searchLogWriterService;
 
     @Test
     public void testSearch_given_no_secured_session_then_return_401() {
@@ -43,6 +46,7 @@ public class PlaceSearchControllerTest {
 
         // Then
         then(placeSearchService).should(never()).search(anyString(), any());
+        then(searchLogWriterService).should(never()).writeSearchLog(anyString());
     }
 
     @Test
@@ -57,6 +61,7 @@ public class PlaceSearchControllerTest {
 
         // Then
         then(placeSearchService).should(never()).search(anyString(), any());
+        then(searchLogWriterService).should(never()).writeSearchLog(anyString());
     }
 
     @Test
@@ -72,6 +77,7 @@ public class PlaceSearchControllerTest {
 
         // Then
         then(placeSearchService).should(never()).search(anyString(), any());
+        then(searchLogWriterService).should(never()).writeSearchLog(anyString());
     }
 
     @Test
@@ -84,9 +90,7 @@ public class PlaceSearchControllerTest {
         given(placeSearchService.search(keyword, page)).willReturn(Mono.just(new ArrayList<>()));
 
         // When
-        webTestClient
-//                .mutateWith(configurer())
-                .get()
+        webTestClient.get()
                      .uri(UriComponentsBuilder.fromPath("/places/search")
                                                  .queryParam("keyword", keyword)
                                                  .queryParam("page", page.getPageNumber())
@@ -98,5 +102,6 @@ public class PlaceSearchControllerTest {
 
         // Then
         then(placeSearchService).should().search(keyword, page);
+        then(searchLogWriterService).should().writeSearchLog(keyword);
     }
 }
