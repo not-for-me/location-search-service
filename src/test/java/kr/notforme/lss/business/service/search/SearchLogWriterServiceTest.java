@@ -10,7 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import kr.notforme.lss.business.repository.search.SearchLogDbRepository;
+import kr.notforme.lss.business.repository.search.SearchLogRepository;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SearchLogWriterServiceTest {
@@ -18,7 +18,7 @@ public class SearchLogWriterServiceTest {
     private SearchLogWriterService sut;
 
     @Mock
-    private SearchLogDbRepository searchLogDbRepository;
+    private SearchLogRepository searchLogRepository;
 
     @Test
     public void writeSearchLog_given_valid_keyword_then_save_it() {
@@ -29,7 +29,7 @@ public class SearchLogWriterServiceTest {
         sut.writeSearchLog(keyword);
 
         // Then
-        then(searchLogDbRepository).should().save(any());
+        then(searchLogRepository).should().writeLog(any());
     }
 
     @Test
@@ -41,7 +41,7 @@ public class SearchLogWriterServiceTest {
         sut.writeSearchLog(keyword);
 
         // Then
-        then(searchLogDbRepository).should(never()).save(any());
+        then(searchLogRepository).should(never()).writeLog(any());
 
 
         // Given
@@ -51,6 +51,6 @@ public class SearchLogWriterServiceTest {
         sut.writeSearchLog(keyword);
 
         // Then
-        then(searchLogDbRepository).should(never()).save(any());
+        then(searchLogRepository).should(never()).writeLog(any());
     }
 }

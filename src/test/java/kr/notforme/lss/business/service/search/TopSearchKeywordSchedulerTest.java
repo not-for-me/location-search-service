@@ -17,6 +17,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import kr.notforme.lss.business.repository.search.SearchLogRepository;
 import kr.notforme.lss.business.repository.search.TopSearchKeywordRepository;
+import kr.notforme.lss.support.cache.ReactiveCacheManager;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TopSearchKeywordSchedulerTest {
@@ -27,6 +28,8 @@ public class TopSearchKeywordSchedulerTest {
     private SearchLogRepository searchLogRepository;
     @Mock
     private TopSearchKeywordRepository topSearchKeywordRepository;
+    @Mock
+    private ReactiveCacheManager reactiveCacheManager;
 
     @Test
     public void testRefreshTop10SearchKeyword() {
@@ -40,5 +43,6 @@ public class TopSearchKeywordSchedulerTest {
         then(topSearchKeywordRepository).should().clearData();
         then(searchLogRepository).should().findTopSearchKeyword(any(), anyInt(), anyInt());
         then(topSearchKeywordRepository).should().saveAll(anyCollection());
+        then(reactiveCacheManager).should().evictSearchKeywordRankingCache(any());
     }
 }

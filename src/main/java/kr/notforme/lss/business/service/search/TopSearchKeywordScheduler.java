@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 import kr.notforme.lss.business.model.search.TopSearchKeyword;
 import kr.notforme.lss.business.repository.search.SearchLogRepository;
 import kr.notforme.lss.business.repository.search.TopSearchKeywordRepository;
+import kr.notforme.lss.support.cache.CacheKeyResolver;
+import kr.notforme.lss.support.cache.ReactiveCacheManager;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -20,12 +22,15 @@ public class TopSearchKeywordScheduler {
     private static final int SEARCH_DURATION_IN_DAYS = 30;
     private SearchLogRepository searchLogRepository;
     private TopSearchKeywordRepository topSearchKeywordRepository;
+    private ReactiveCacheManager reactiveCacheManager;
 
     public TopSearchKeywordScheduler(
             SearchLogRepository searchLogRepository,
-            TopSearchKeywordRepository topSearchKeywordRepository) {
+            TopSearchKeywordRepository topSearchKeywordRepository,
+            ReactiveCacheManager reactiveCacheManager) {
         this.searchLogRepository = searchLogRepository;
         this.topSearchKeywordRepository = topSearchKeywordRepository;
+        this.reactiveCacheManager = reactiveCacheManager;
     }
 
     // It would be adjust according to log data volume
@@ -43,5 +48,6 @@ public class TopSearchKeywordScheduler {
         topSearchKeywordRepository.saveAll(topKeywords);
 
         log.debug("Finish to fetch top search keywords");
+        this.reactiveCacheManager.evictSearchKeywordRankingCache(CacheKeyResolver.getSearchRankingKey());
     }
 }

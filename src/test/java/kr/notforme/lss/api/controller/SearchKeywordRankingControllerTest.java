@@ -1,5 +1,6 @@
 package kr.notforme.lss.api.controller;
 
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
 import org.junit.Test;
@@ -13,6 +14,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import kr.notforme.lss.business.service.search.TopSearchKeywordService;
+import reactor.core.publisher.Mono;
 
 @RunWith(SpringRunner.class)
 @WebFluxTest(SearchKeywordRankingController.class)
@@ -26,6 +28,9 @@ public class SearchKeywordRankingControllerTest {
     @Test
     @WithMockUser
     public void testSearchKeywordRankings() {
+        // Given
+        given(topSearchKeywordService.getTopSearchKeywordRankings()).willReturn(Mono.empty());
+
         // When
         webTestClient.get()
                      .uri(UriComponentsBuilder.fromPath("/keywords/ranking").build().toUri())

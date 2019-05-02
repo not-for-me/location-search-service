@@ -20,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import kr.notforme.lss.api.response.PlaceSearchResult;
 import kr.notforme.lss.business.repository.place.PlaceSearchRepository;
 import kr.notforme.lss.support.cache.CacheKeyResolver;
+import kr.notforme.lss.support.cache.ReactiveCacheManager;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
@@ -29,7 +30,7 @@ public class PlaceSearchServiceTest {
     private PlaceSearchService sut;
 
     @Mock
-    private PlaceSearchCacheService placeSearchCacheService;
+    private ReactiveCacheManager reactiveCacheManager;
     @Mock
     private PlaceSearchRepository placeSearchRepository;
 
@@ -40,7 +41,7 @@ public class PlaceSearchServiceTest {
         final Pageable page = PageRequest.of(1, 10);
         String key = CacheKeyResolver.getPlaceSearchKey(keyword, page);
 
-        given(placeSearchCacheService.getCachedSearchResult(key)).willReturn(Mono.empty());
+        given(reactiveCacheManager.getPlaceSearchResultCache(key)).willReturn(Mono.empty());
         given(placeSearchRepository.search(keyword, page)).willReturn(Mono.just(new ArrayList<>()));
 
         // When
@@ -50,7 +51,7 @@ public class PlaceSearchServiceTest {
         StepVerifier.create(actualMono)
                     .expectNext(new ArrayList<>())
                     .verifyComplete();
-        then(placeSearchCacheService).should().putCache(eq(key), any());
+        then(reactiveCacheManager).should().putPlaceSearchResultCache(eq(key), any());
         then(placeSearchRepository).should().search(keyword, page);
     }
 
@@ -65,6 +66,6 @@ public class PlaceSearchServiceTest {
 
         // Then
         then(placeSearchRepository).should(never()).search(any(), any());
-        then(placeSearchCacheService).should(never()).putCache(any(), any());
+        then(reactiveCacheManager).should(never()).putPlaceSearchResultCache(any(), any());
     }
 }

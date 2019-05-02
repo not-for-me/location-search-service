@@ -16,13 +16,12 @@ import reactor.core.publisher.Mono;
 public class SearchKeywordRankingController {
     private TopSearchKeywordService topSearchKeywordService;
 
-    public SearchKeywordRankingController(
-            TopSearchKeywordService topSearchKeywordService) {
+    public SearchKeywordRankingController(TopSearchKeywordService topSearchKeywordService) {
         this.topSearchKeywordService = topSearchKeywordService;
     }
 
     @GetMapping("/ranking")
     public Mono<ApiResponse<List<SearchKeywordRanking>>> getSearchKeywordRanking() {
-        return Mono.just(ApiResponse.of(topSearchKeywordService.getTopSearchKeywordRankings()));
+        return topSearchKeywordService.getTopSearchKeywordRankings().map(ApiResponse::of);
     }
 }
