@@ -59,5 +59,6 @@ public class KakaoPlaceSearchRepositoryTest {
         assertThat(actual.getAddress()).isEqualTo(fixture.getAddressName());
         assertThat(actual.getRoadAddress()).isEqualTo(fixture.getRoadAddressName());
         assertThat(actual.getPhone()).isEqualTo(fixture.getPhone());
+        assertThat(actual.getMapUrl()).startsWith("http://");
     }
 }

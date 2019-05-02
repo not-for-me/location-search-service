@@ -18,7 +18,6 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import kr.notforme.lss.api.response.PlaceSearchResult;
 import kr.notforme.lss.config.props.ExternalServiceProp;
 import kr.notforme.lss.config.props.ExternalServiceProp.ExternalService;
-import kr.notforme.lss.config.props.ExternalServiceProp.LocalPlaceSearch;
 import kr.notforme.lss.support.exceptions.ResourceAccessException;
 import kr.notforme.lss.support.http.WebClientFilters;
 import lombok.Data;
@@ -30,6 +29,8 @@ import reactor.core.publisher.Mono;
 public class KakaoPlaceSearchRepository implements PlaceSearchRepository {
     private final ExternalService kakaoApiInfo;
     private final WebClient webClient;
+
+    private static final String DAUM_MAP_URL_TEMPLATE = "http://map.daum.net/link/map/%s";
 
     public KakaoPlaceSearchRepository(ExternalServiceProp externalServiceProp) {
         this.kakaoApiInfo = Objects.requireNonNull(externalServiceProp.getLocalPlaceSearch(),
@@ -75,6 +76,8 @@ public class KakaoPlaceSearchRepository implements PlaceSearchRepository {
         placeSearchResult.setAddress(kakaoPlaceSearchResult.getAddressName());
         placeSearchResult.setRoadAddress(kakaoPlaceSearchResult.getRoadAddressName());
         placeSearchResult.setPhone(kakaoPlaceSearchResult.getPhone());
+
+        placeSearchResult.setMapUrl(String.format(DAUM_MAP_URL_TEMPLATE, kakaoPlaceSearchResult.getId()));
 
         return placeSearchResult;
     }
