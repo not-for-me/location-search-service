@@ -1,4 +1,4 @@
-package kr.notforme.lss.business.service;
+package kr.notforme.lss.business.service.user;
 
 import java.util.Collection;
 import java.util.stream.Collectors;

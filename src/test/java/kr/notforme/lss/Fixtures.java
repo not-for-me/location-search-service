@@ -4,6 +4,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 import kr.notforme.lss.business.model.user.User;
 import kr.notforme.lss.business.model.user.UserRegistration;
+import kr.notforme.lss.business.repository.place.KakaoPlaceSearchRepository.KakaoPlaceSearchResult;
 
 public class Fixtures {
     public static User generateUser() {
@@ -26,6 +27,18 @@ public class Fixtures {
 
     public static UserRegistration generateUserRegistration(String id, String password) {
        return new UserRegistration(id, password);
+    }
+
+
+    public static KakaoPlaceSearchResult generateKakaoPlaceSearchResult() {
+        KakaoPlaceSearchResult fixture = new KakaoPlaceSearchResult();
+        fixture.setPlaceName(RandomStringUtils.randomAlphanumeric(8));
+        fixture.setPlaceUrl(RandomStringUtils.randomAlphanumeric(24));
+        fixture.setAddressName(RandomStringUtils.randomAlphanumeric(24));
+        fixture.setRoadAddressName(RandomStringUtils.randomAlphanumeric(24));
+        fixture.setPhone(RandomStringUtils.randomNumeric(11));
+
+        return fixture;
     }
 
 
