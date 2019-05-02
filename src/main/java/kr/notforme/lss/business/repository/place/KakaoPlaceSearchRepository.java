@@ -1,13 +1,16 @@
 package kr.notforme.lss.business.repository.place;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriBuilder;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -26,35 +29,41 @@ import reactor.core.publisher.Mono;
 @Repository
 public class KakaoPlaceSearchRepository implements PlaceSearchRepository {
     private final ExternalService kakaoApiInfo;
+    private final WebClient webClient;
 
     public KakaoPlaceSearchRepository(ExternalServiceProp externalServiceProp) {
         this.kakaoApiInfo = Objects.requireNonNull(externalServiceProp.getLocalPlaceSearch(),
-                               "required local place search info").getKakao();
+                                                   "required local place search info").getKakao();
 
         Objects.requireNonNull(kakaoApiInfo, "required kakao place search open api endpoint info");
+        webClient = WebClient.builder()
+                             .baseUrl(kakaoApiInfo.getHost())
+                             .filter(WebClientFilters.requestLogFilter())
+                             .filter(WebClientFilters.responseLogFilter())
+                             .build();
     }
 
     public Mono<List<PlaceSearchResult>> search(String keyword, Pageable page) {
-        return WebClient.builder()
-                        .baseUrl(kakaoApiInfo.getHost())
-                        .filter(WebClientFilters.requestLogFilter())
-                        .filter(WebClientFilters.responseLogFilter())
-                        .build()
-                        .get()
-                        .uri(uriBuilder -> uriBuilder
-                                .path(kakaoApiInfo.getUri())
-                                .queryParam("query", keyword)
-                                .queryParam("page", page.getPageNumber())
-                                .queryParam("size", page.getPageSize())
-                                .build())
-                        .header("Authorization", "KakaoAK " + kakaoApiInfo.getToken())
-                        .retrieve()
-                        .onStatus(HttpStatus::isError, clientResponse ->
-                                Mono.error(new ResourceAccessException())
-                        )
-                        .bodyToMono(KakaoPlaceSearchResponse.class)
-                        .map(KakaoPlaceSearchResponse::getDocuments)
-                        .map(kakaoList -> kakaoList.stream().map(this::convert).collect(Collectors.toList()));
+        return webClient
+                .get()
+                .uri(uriBuilder(keyword, page))
+                .header("Authorization", "KakaoAK " + kakaoApiInfo.getToken())
+                .retrieve()
+                .onStatus(HttpStatus::isError, clientResponse -> Mono.error(new ResourceAccessException()))
+                .bodyToMono(KakaoPlaceSearchResponse.class)
+                .log()
+                .map(KakaoPlaceSearchResponse::getDocuments)
+                .map(kakaoList -> kakaoList.stream().map(this::convert).collect(Collectors.toList()))
+                .doOnError(error -> log.error("Failed to search location", error));
+    }
+
+    private Function<UriBuilder, URI> uriBuilder(String keyword, Pageable page) {
+        return uriBuilder -> uriBuilder
+                .path(kakaoApiInfo.getUri())
+                .queryParam("query", keyword)
+                .queryParam("page", page.getPageNumber())
+                .queryParam("size", page.getPageSize())
+                .build();
     }
 
     // visible for testing
