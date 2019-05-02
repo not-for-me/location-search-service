@@ -32,6 +32,7 @@ public class Fixtures {
 
     public static KakaoPlaceSearchResult generateKakaoPlaceSearchResult() {
         KakaoPlaceSearchResult fixture = new KakaoPlaceSearchResult();
+        fixture.setId(RandomStringUtils.randomNumeric(4));
         fixture.setPlaceName(RandomStringUtils.randomAlphanumeric(8));
         fixture.setPlaceUrl(RandomStringUtils.randomAlphanumeric(24));
         fixture.setAddressName(RandomStringUtils.randomAlphanumeric(24));
