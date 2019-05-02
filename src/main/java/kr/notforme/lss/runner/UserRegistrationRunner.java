@@ -11,13 +11,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import kr.notforme.lss.business.model.user.UserRegistration;
-import kr.notforme.lss.business.service.UserService;
+import kr.notforme.lss.business.service.user.UserService;
 import kr.notforme.lss.support.exceptions.NotExistUserException;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 public class UserRegistrationRunner implements ApplicationRunner {
-    private static final Logger log = LoggerFactory.getLogger(UserRegistrationRunner.class);
-
     private final UserService userService;
     private static Collection<UserRegistration> userRegistrations;
 

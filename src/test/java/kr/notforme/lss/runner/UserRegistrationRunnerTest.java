@@ -16,7 +16,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.DefaultApplicationArguments;
 
 import kr.notforme.lss.Fixtures;
-import kr.notforme.lss.business.service.UserService;
+import kr.notforme.lss.business.service.user.UserService;
 import kr.notforme.lss.business.model.user.UserRegistration;
 import kr.notforme.lss.support.exceptions.NotExistUserException;
 

@@ -16,6 +16,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import kr.notforme.lss.business.model.user.UserRegistration;
 import kr.notforme.lss.business.repository.user.UserRepository;
+import kr.notforme.lss.business.service.user.UserService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserServiceTest {
