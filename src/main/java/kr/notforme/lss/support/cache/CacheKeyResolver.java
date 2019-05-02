@@ -12,4 +12,8 @@ public class CacheKeyResolver {
                  .append(DELEMITER).append(page.getPageNumber())
                  .append(DELEMITER).append(page.getPageSize()).toString();
     }
+
+    public static String getSearchRankingKey() {
+        return "search-keyword:ranking";
+    }
 }
