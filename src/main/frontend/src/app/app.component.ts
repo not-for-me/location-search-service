@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { LocationSearchService } from "../services/location-search.service";
 import { ResultContainer } from "../shared/result-container.model";
 import { DynamicScriptLoaderService } from "../services/dynamic-script-loader.service";
+import { NgxSpinnerService } from 'ngx-spinner';
 
 declare var daum;
 
@@ -19,7 +20,8 @@ export class AppComponent implements OnInit {
   private curInfoWindow: any;
 
   constructor(private locationSearchService: LocationSearchService,
-              private dynamicScriptLoaderService: DynamicScriptLoaderService) {
+              private dynamicScriptLoaderService: DynamicScriptLoaderService,
+              private spinner: NgxSpinnerService) {
   }
 
   ngOnInit(): void {
@@ -29,10 +31,11 @@ export class AppComponent implements OnInit {
   public search($event) {
     const keyword = $event;
     console.debug(`keyword: ${keyword}`);
+    this.spinner.show()
     this.locationSearchService.search(keyword)
       .subscribe((r: ResultContainer) => {
         this.searchPlaceResults = r.data;
-      });
+      }, ()=>{}, () => this.spinner.hide());
   }
 
   public showDetail(place) {

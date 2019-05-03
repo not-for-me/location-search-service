@@ -14,6 +14,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { NgMatSearchBarModule } from 'ng-mat-search-bar';
 
+import { NgxSpinnerModule } from 'ngx-spinner';
+
 
 import { AppComponent } from './app.component';
 import { LocationSearchService } from "../services/location-search.service";
@@ -34,7 +36,8 @@ import { DynamicScriptLoaderService } from "../services/dynamic-script-loader.se
     MatButtonModule,
     FlexLayoutModule,
     NgMatSearchBarModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    NgxSpinnerModule
   ],
   providers: [LocationSearchService, DynamicScriptLoaderService],
   bootstrap: [AppComponent]
