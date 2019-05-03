@@ -1,0 +1,36 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <span>{{title}}</span>
+    <span class="example-spacer"></span>
+    <mat-search-bar (onEnter)="search($event)"></mat-search-bar>
+  </mat-toolbar-row>
+</mat-toolbar>
+<div class="content"
+     fxLayout="row"
+     fxLayout.xs="column"
+     fxLayoutAlign="space-between none"
+     fxFlexFill>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Location Search Result</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-list dense>
+        <mat-list-item *ngFor="let place of searchPlaceResults">
+          <h4 mat-line>{{ place.placeName }}</h4>
+          <p mat-line> {{ place.address }} </p>
+          <button mat-stroked-button color="accent" (click)="showDetail(place)"> 상세 </button>
+        </mat-list-item>
+      </mat-list>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Location Map</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div #map style="width:800px;height:600px;"></div>
+    </mat-card-content>
+  </mat-card>
+</div>

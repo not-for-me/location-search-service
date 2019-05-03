@@ -37,6 +37,8 @@ public class Fixtures {
         fixture.setPlaceUrl(RandomStringUtils.randomAlphanumeric(24));
         fixture.setAddressName(RandomStringUtils.randomAlphanumeric(24));
         fixture.setRoadAddressName(RandomStringUtils.randomAlphanumeric(24));
+        fixture.setX(RandomStringUtils.randomNumeric(10));
+        fixture.setY(RandomStringUtils.randomNumeric(10));
         fixture.setPhone(RandomStringUtils.randomNumeric(11));
 
         return fixture;

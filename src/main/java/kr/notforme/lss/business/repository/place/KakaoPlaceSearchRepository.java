@@ -75,6 +75,9 @@ public class KakaoPlaceSearchRepository implements PlaceSearchRepository {
         placeSearchResult.setPlaceUrl(kakaoPlaceSearchResult.getPlaceUrl());
         placeSearchResult.setAddress(kakaoPlaceSearchResult.getAddressName());
         placeSearchResult.setRoadAddress(kakaoPlaceSearchResult.getRoadAddressName());
+        placeSearchResult.setLat(kakaoPlaceSearchResult.getY());
+        placeSearchResult.setLon(kakaoPlaceSearchResult.getX());
+
         placeSearchResult.setPhone(kakaoPlaceSearchResult.getPhone());
 
         placeSearchResult.setMapUrl(String.format(DAUM_MAP_URL_TEMPLATE, kakaoPlaceSearchResult.getId()));

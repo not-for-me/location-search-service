@@ -9,5 +9,7 @@ public class PlaceSearchResult {
     private String mapUrl;
     private String address;
     private String roadAddress;
+    private String lat;
+    private String lon;
     private String phone;
 }

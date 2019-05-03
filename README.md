@@ -13,7 +13,12 @@ $ ./gradlew clean bootRun
   * 계정 ID/비번: admin/admin
 http://localhost:10080
 
-* 프론트 화면이 없기 때문에 로그인 후에는 다음 2가지 api를 호출 가능합니다.
+* (토요일 추가작업): 싱글페이지 앱이 추가되어 위에서 `gradlew`로 was 띄울 때 웹앱 기동
+* 다음 url로 접속하여 `admin/admin`으로 로그인 후 검색 및 지도 확인가능
+```
+ http://localhost:10080
+```
+* API만 호출하기 원할 경우에는 로그인 후에는 다음 2가지 api를 호출 가능
   * 검색 API: http://localhost:10080/places/search?keyword=피자&page=1&size=10
   * 인기 키워드 API: http://localhost:10080/keywords/ranking
 
@@ -36,7 +41,7 @@ http://localhost:10080
 * spring-boot-starter-data-jpa: 사용자 정보, 관계형 데이터 저장용 jpa 사용
 * spring-boot-starter-security: 신속하게 권한기능 추가할 용도
 * spring-boot-starter-cache: 로컬 캐시용
-* spring-boot-starter-webflux: 구현 서비스가 외부 api호충이라 non blocking 웹 스택 구축을 위해 사용
+* spring-boot-starter-webflux: 구현 서비스가 외부 api호출이라 non blocking 웹 스택 구축을 위해 사용
 * caffeine:2.6.2: 로컬 캐시용 (구 guava 캐시)
 * reactor-extra:3.2.2.RELEASE: 리액터 로컬 캐시 도구
 * commons-lang3:3.8.1: 가독성 및 개발 편의를 위한 유틸리티 용
